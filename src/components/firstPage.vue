@@ -13,7 +13,12 @@
         </div>
         <div class="currentSalary">
           <p>Ваша зарплата в месяц</p>
-          <input type="text" placeholder="Введите данные">
+          <input 
+            type="text" 
+            placeholder="Введите данные"
+            v-model="salary"
+            @keydown.enter="add"
+          >
           <span>Рассчитать</span>
         </div>
 
@@ -53,7 +58,11 @@
 export default {
   data(){
     return{
-      showCalculations: true
+      showCalculations: true,
+      salary: null,
+      taxFree:null,
+      returnMoneyInYear: null,
+      fullReturn: []
     }
   },
   mounted(){
@@ -66,11 +75,60 @@ export default {
       mainColor.style.background = '#b3b3b3';
     }
   },
-
+  methods:{
+    add(){
+      let curSalary = Number(this.salary);
+      if( isNaN(curSalary) ) {
+      return alert('Введите число!'); 
+      }
+      // налог ежемесячный
+      this.taxFree = curSalary *0.13;
+      // налог в год
+      this.returnMoneyInYear = this.taxFree*12;
+      // возвращаем 260тыс если слишком большая зарплата
+      if(this.returnMoneyInYear >= 260000){
+        this.returnMoneyInYear = 260000;
+        return this.fullReturn.push(this.returnMoneyInYear)
+      }
+      this.amoundOfMoney(this.returnMoneyInYear);
+      console.log(this.amoundOfMoney(this.returnMoneyInYear));
+    },
+    amoundOfMoney(n){
+      let maxReturn = 260000;
+      let res = maxReturn - n;
+      this.fullReturn.push(n);
+      while(res >= 0){
+        this.fullReturn.push(this.amoundOfMoney(260000-res));
+      } 
+      return this.fullReturn;
+    },
+  },
+  computed:{
+      
+  },
 }
 </script>
 
 <style >
+@font-face {
+  font-family: 'Lab Grotesque Reg';
+  src: local('/font/Lab Grotesque Regular'), local('/font/Lab-Grotesque-Regular'),
+      url('/font/LabGrotesque-Regular.woff2') format('woff2'),
+      url('/font/LabGrotesque-Regular.woff') format('woff'),
+      url('/font/LabGrotesque-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Lab Grotesque Med';
+  src: local('/font/Lab Grotesque Medium'), local('/font/Lab-Grotesque-Medium'),
+      url('/font/LabGrotesque-Medium.woff2') format('woff2'),
+      url('/font/LabGrotesque-Medium.woff') format('woff'),
+      url('/font/LabGrotesque-Medium.ttf') format('truetype');
+  font-weight: 500;
+  font-style: normal;
+}
+
 *{
   text-decoration: none;
   margin: 0;
@@ -88,16 +146,14 @@ export default {
   height: 100%;
 
 /* шрифты в компоненте */
-  font-family: Lab Grotesque;
-  font-style: normal;
-  font-weight: 500;
+  font-family: 'Lab Grotesque Med', Fallback, sans-serif;
   font-size: 14px;
   color: black;
 }
 .close_img{
   position: absolute;
   right: 5%;
-  top: 7%;
+  top: 4%;
 }
 .title {
   font-size: 28px;
@@ -105,8 +161,7 @@ export default {
   padding: 32px;
 }
 .title_ctx{
-  padding-left: 32px;
-  width: 448px;
+  padding: 0 52px 0 32px;
 }
 .title_ctx > p {
   color: rgba(128, 128, 128, 1);
@@ -114,9 +169,7 @@ export default {
   vertical-align: top;
 }
 .currentSalary{
-  padding-left: 32px;
-  padding-top: 24px;
-  padding-bottom: 16px;
+  padding: 24px 32px 16px 32px;
 }
 .currentSalary > p {
   color: rgba(0, 0, 0, 1);
@@ -147,7 +200,6 @@ export default {
   background: #EEF0F2;
   border-radius: 50px;
   border:none;
-  margin-right: 26px;
   margin-left: 32px;
 }
 .btn_pay:hover{
@@ -157,6 +209,8 @@ export default {
   background: linear-gradient(255.35deg, #DC3131 0.83%, rgba(255, 79, 79, 0) 108.93%), #FF5E56;
   border-radius: 50px;
   border:none;
+  margin-left: 20px;
+
 }
 .btn_add { 
   margin-top: 40px;
@@ -177,10 +231,10 @@ export default {
   padding-bottom: 32px;
 }
 .calculations {
-  padding-left: 32px;
   display: flex;
   flex-direction: column;
   flex-wrap: nowrap;
+  padding: 0 32px;
 }
 .repaymentPerYear{
   display: flex;
@@ -188,11 +242,15 @@ export default {
   justify-content: flex-start;
   align-items: center;
   height: 56px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.3);
 }
 .repaymentPerYear > input {
   margin-right: 12px;
 }
 .repaymentPerYear > p{
   line-height: 24px;
+}
+.repaymentPerYear > p >  span{
+  opacity: 0.5;
 }
 </style>
