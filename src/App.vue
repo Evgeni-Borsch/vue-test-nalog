@@ -9,6 +9,7 @@
 </template>
 
 <script>
+import defaultPage from './components/defaultPage.vue'
 
 
 export default {
