@@ -1,7 +1,6 @@
 <template>
   <div id="app">
     
-
   </div>
 </template>
 
@@ -18,5 +17,6 @@ export default {
 
 <style>
 #app {
+  background: red;
 }
 </style>
