@@ -1,7 +1,7 @@
 import VueRouter from 'vue-router'
 
 import defaultPage from '@/components/defaultPage'
-import lastPage from '@/components/lastPage'
+import firstPage from '@/components/firstPage'
 
 
 export default new VueRouter({
@@ -9,14 +9,14 @@ export default new VueRouter({
   routes:[
     {
       path:'/',
-      name:'default',
+      name:'mainPage',
       component: defaultPage,
       props: true
     },
     {
-      path:'/last',
-      name:'last',
-      component: lastPage,
+      path:'/first',
+      name:'first',
+      component: firstPage,
       props: true
     }
   ]

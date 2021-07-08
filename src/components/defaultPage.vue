@@ -1,7 +1,9 @@
 <template>
-  <button class="main_btn" type="button" @click="$router.push({name:'last'})">
-    <span class="main_btn_text"> Налоговый вычет </span>
-  </button> 
+  <div class="container">
+    <button class="main_btn" type="button" @click="$router.push({name:'first'})">
+      <span class="main_btn_text"> Налоговый вычет </span>
+    </button> 
+  </div>
 </template>
 
 <script>
@@ -11,6 +13,14 @@ export default {
 </script>
 
 <style scoped>
+.container{
+  display: flex;
+  padding: 50vh 0;
+}
+.main {
+  width: 100%;
+  height: 100vh;
+}
 .main_btn {
   width: 149px;
   height: 40px;
@@ -20,10 +30,10 @@ export default {
   filter: drop-shadow(0px 0px 44px #CFDAE7);
   border-radius: 6px;
   background: none;
+  pointer-events: visible;
 }
 .main_btn_text{
   color: #FFFFFF;
-  font-family: Lab Grotesque;
   font-style: normal;
   font-weight: 500;
   font-size: 12px;
