@@ -16,18 +16,46 @@
           <input type="text" placeholder="Введите данные">
           <span>Рассчитать</span>
         </div>
+
+        <div v-if="showCalculations === true" class="calculations">
+          <p> Итого можете внести в качестве досрочных: </p>
+          <div class="repaymentPerYear">
+            <input type="checkbox">
+            <p>78000 тыс руб <span> в 1-й год </span> </p>
+          </div>
+          <div class="repaymentPerYear">
+            <input type="checkbox">
+            <p>78000 тыс руб <span> в 2-й год </span> </p>
+          </div>
+          <div class="repaymentPerYear">
+            <input type="checkbox">
+            <p>78000 тыс руб <span> в 3-й год </span> </p>
+          </div>
+          <div class="repaymentPerYear">
+            <input type="checkbox">
+            <p>26000 тыс руб <span> в 4-й год </span> </p>
+          </div>
+        </div>
+
         <div class="choiceOfPayment">
           <p> Что уменьшаем? </p>
           <button type="button" class="btn_pay">Платеж</button>
           <button type="button" class="btn_pay">Срок</button>
         </div>
-        <button type="button" class="btn_add"> Добавить </button>
+        <div class="add">
+          <button type="button" class="btn_add"> Добавить </button>
+        </div>
     </div>
   </div>
 </template>
 
 <script>
 export default {
+  data(){
+    return{
+      showCalculations: true
+    }
+  },
   mounted(){
     // цвет фона при открытии страницы
     if(document.location.pathname == "/first"){
@@ -57,6 +85,8 @@ export default {
   height: 476px;
   background: #FFFFFF;
   border-radius: 30px;
+  height: 100%;
+
 /* шрифты в компоненте */
   font-family: Lab Grotesque;
   font-style: normal;
@@ -86,7 +116,7 @@ export default {
 .currentSalary{
   padding-left: 32px;
   padding-top: 24px;
-  padding-bottom: 28px;
+  padding-bottom: 16px;
 }
 .currentSalary > p {
   color: rgba(0, 0, 0, 1);
@@ -108,6 +138,8 @@ export default {
 .choiceOfPayment{
   display: flex;
   padding-left: 32px;
+  align-items: baseline;
+  margin-top: 8px;
 }
 .btn_pay{
   width: 57px;
@@ -139,6 +171,28 @@ export default {
   border:none;
   color: #fff;
   font-size: 16px;
+  line-height: 24px;
+}
+.add {
+  padding-bottom: 32px;
+}
+.calculations {
+  padding-left: 32px;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+}
+.repaymentPerYear{
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  height: 56px;
+}
+.repaymentPerYear > input {
+  margin-right: 12px;
+}
+.repaymentPerYear > p{
   line-height: 24px;
 }
 </style>
