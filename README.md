@@ -1,24 +1,4 @@
 # vue-test-nalog
-
-## Project setup
-```
-npm install
-```
-
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
-
-### Compiles and minifies for production
-```
-npm run build
-```
-
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+Расчет налогов в год, которые можно вернуть с продажи квартиры.
+Для реализации используется исключительно Vue.js, vue-material, vue-router.
+# Production https://vue-test-nalog2.vercel.app/
