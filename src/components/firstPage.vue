@@ -48,7 +48,7 @@
           <button type="button" class="btn_pay">Срок</button>
         </div>
         <div class="add">
-          <button type="button" class="btn_add"> Добавить </button>
+          <button type="button" class="btn_add" > Добавить </button>
         </div>
     </div>
   </div>
@@ -79,8 +79,13 @@ export default {
     add(){
       let curSalary = Number(this.salary);
       if( isNaN(curSalary) ) {
-      return alert('Введите число!'); 
+        return alert('Введите число!'); 
       }
+        if(curSalary >= 166666.6){
+          this.fullReturn = [];
+          return this.fullReturn.push(260000);
+        }
+          console.log(this.fullReturn);
       // налог ежемесячный
       this.taxFree = curSalary *0.13;
       // налог в год
@@ -88,18 +93,24 @@ export default {
       // возвращаем 260тыс если слишком большая зарплата
       if(this.returnMoneyInYear >= 260000){
         this.returnMoneyInYear = 260000;
-        return this.fullReturn.push(this.returnMoneyInYear)
+        this.fullReturn.push(this.returnMoneyInYear);
+        return;
       }
       this.amoundOfMoney(this.returnMoneyInYear);
       console.log(this.amoundOfMoney(this.returnMoneyInYear));
     },
+    // функция, которая возвращает массив с годовыми взносами и последним элементов является остаточная сумма 
     amoundOfMoney(n){
       let maxReturn = 260000;
-      let res = maxReturn - n;
-      this.fullReturn.push(n);
-      while(res >= 0){
-        this.fullReturn.push(this.amoundOfMoney(260000-res));
-      } 
+      let res = Number((maxReturn/n).toFixed(0));
+      if(this.fullReturn.length != res){
+        for(let i=0;i<res;i++){
+          this.fullReturn.push(n);
+        }
+      } else{
+        let remainder = this.fullReturn.map(i=>n+=i, n=0).reverse()[0];
+        this.fullReturn.push(maxReturn  - remainder);
+      }
       return this.fullReturn;
     },
   },
