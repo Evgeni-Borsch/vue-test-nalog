@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <button class="main_btn" type="button" @click="$router.push({name:'first'})">
+    <button class="main_btn" type="button" @click="$router.push({name:'calculate'})">
       <span class="main_btn_text"> Налоговый вычет </span>
     </button> 
   </div>

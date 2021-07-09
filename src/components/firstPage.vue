@@ -1,6 +1,6 @@
 <template>
   <div class="firstPage_container">
-    <router-link :to="{name: 'last'}"></router-link>
+    <router-link :to="{name: 'calculate'}"></router-link>
     <div class="firstWindow">
         <img src="@/assets/Vector.svg" alt="close" class="close_img" @click="returnWindow">
         <div class="header">
@@ -19,14 +19,15 @@
             v-model="salary"
             @keydown.enter="add"
           >
-          <span>Рассчитать</span>
+          <span v-if="error == true">Поле обязательно для заполнения</span>
+          <span v-else>Рассчитать</span>
         </div>
 
         <div v-if="showCalculations === true" class="calculations">
           <p> Итого можете внести в качестве досрочных: </p>
           <div class="repaymentPerYear" v-for="(pay,index) in fullReturn" :key="index">
-            <input type="checkbox">
-            <p>{{pay}} тыс руб <span> {{index+1}}-й год </span> </p>
+            <md-checkbox v-model="check[index]" ></md-checkbox>
+            <p>{{pay.toFixed(0)}} тыс руб <span> {{index+1}}-й год </span> </p>
           </div>
         </div>
 
@@ -35,7 +36,7 @@
           <button type="button" class="btn_pay">Платеж</button>
           <button type="button" class="btn_pay">Срок</button>
         </div>
-        <div class="add">
+        <div class="add" >
           <button type="button" class="btn_add" > Добавить </button>
         </div>
     </div>
@@ -46,6 +47,8 @@
 export default {
   data(){
     return{
+      error: false,
+      check:[],
       showCalculations: true,
       salary: null,
       taxFree:null,
@@ -55,7 +58,7 @@ export default {
   },
   mounted(){
     // цвет фона при открытии страницы
-    if(document.location.pathname == "/first"){
+    if(document.location.pathname == "/calculate"){
       let mainColor = document.querySelector(".main");
       if( null === mainColor || undefined === mainColor){
         return;
@@ -69,37 +72,46 @@ export default {
       document.querySelector(".main").style.background = 'linear-gradient(255.35deg, #DC3131 0.83%, rgba(255, 79, 79, 0) 108.93%), #FF5E56';
     },
     add(){
+      // проверка на наличие символов в инпуте
+      if(null === this.salary){
+        document.querySelector(".currentSalary > input").style.border = '3px solid #EA0029';
+        this.error = true
+        return;
+      }
+      document.querySelector(".currentSalary > input").style.border = '3px solid #DFE3E6';
+      this.error = false;
+
+      //  обнуление массивов с данными для запроса следующих данных
       this.fullReturn = [];
       this.returnMoneyInYear = [];
+
+      // проверка на тип введенных символов, чтобы было число
       let curSalary = Number(this.salary);
       if( isNaN(curSalary) ) {
         return alert('Введите число!'); 
       }
-        if(curSalary >= 166666.6){
-          this.fullReturn = [];
-          return this.fullReturn.push(260000);
-        }
-          console.log(this.fullReturn);
+
+      // возвращаем 260тыс если слишком большая зарплата
+      if(curSalary >= 166666.6){
+        this.fullReturn = [];
+        return this.fullReturn.push(260000);
+      }
+      console.log(this.fullReturn);
 
       // налог ежемесячный
       this.taxFree = curSalary *0.13;
       // налог в год
       this.returnMoneyInYear = this.taxFree*12;
-      // возвращаем 260тыс если слишком большая зарплата
-      if(this.returnMoneyInYear >= 260000){
-        this.returnMoneyInYear = 260000;
-        this.fullReturn.push(this.returnMoneyInYear);
-        return;
-      }
       this.amoundOfMoney(this.returnMoneyInYear);
       console.log(this.amoundOfMoney(this.returnMoneyInYear));
     },
+
     // функция, которая возвращает массив с годовыми взносами и последним элементов является остаточная сумма 
     amoundOfMoney(n){
       let maxReturn = 260000;
       let res = Math.floor(maxReturn/n);
       if(this.fullReturn.length != res){
-        for(let i=0;i<res;i++){
+        for( let i=0; i<res; i++ ) {
           this.fullReturn.push(n);
         }
       } else{
@@ -110,9 +122,6 @@ export default {
       }
       return this.fullReturn;
     },
-  },
-  computed:{
-      
   },
 }
 </script>
@@ -136,8 +145,6 @@ export default {
   font-weight: 500;
   font-style: normal;
 }
-
-
 
 *{
   text-decoration: none;
@@ -212,10 +219,14 @@ export default {
   color: #EA0029;
   line-height: 24px;
   margin-top: 8px;
+  cursor: url("/assets/Pointer.svg"), pointer;
+}
+.currentSalary > span:hover{
+  color: #F53A31;
 }
 .choiceOfPayment{
   display: flex;
-  padding-left: 32px;
+  padding: 0 32px;
   align-items: baseline;
   margin-top: 8px;
 }
@@ -228,12 +239,13 @@ export default {
   margin-left: 32px;
 }
 .btn_pay:hover{
+  cursor: url("/assets/Pointer.svg"), pointer;
   color: #fff;
   width: 73px;
   height: 36px;
   background: linear-gradient(255.35deg, #DC3131 0.83%, rgba(255, 79, 79, 0) 108.93%), #FF5E56;
   border-radius: 50px;
-  border:none;
+  border: none;
   margin-left: 20px;
 
 }
@@ -250,6 +262,7 @@ export default {
   color: #fff;
   font-size: 16px;
   line-height: 24px;
+  cursor: url("/assets/Pointer.svg"), pointer;
 }
 .add {
   margin: 0 32px;
@@ -290,6 +303,7 @@ export default {
 }
 @media screen and (max-width: 490px){
   .firstWindow{ width: 320px; border-radius:0 }
+  .choiceOfPayment { display: block; }
+  .choiceOfPayment > p{ margin-bottom: 24px; }
 }
-
 </style>

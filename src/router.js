@@ -14,8 +14,8 @@ export default new VueRouter({
       props: true
     },
     {
-      path:'/first',
-      name:'first',
+      path:'/calculate',
+      name:'calculate',
       component: firstPage,
       props: true
     }
