@@ -306,6 +306,7 @@ export default {
   .close_img { width: 12px; }
 }
 @media screen and (max-width: 490px){
+  .firstPage_container{ padding-top: 40px; }
   .firstWindow{ width: 320px; border-radius:0 }
   .choiceOfPayment { display: block; }
   .choiceOfPayment > p{ margin-bottom: 24px; }
