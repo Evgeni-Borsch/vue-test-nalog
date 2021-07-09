@@ -2,7 +2,7 @@
   <div class="firstPage_container">
     <router-link :to="{name: 'last'}"></router-link>
     <div class="firstWindow">
-        <img src="@/assets/Vector.svg" alt="close" class="close_img">
+        <img src="@/assets/Vector.svg" alt="close" class="close_img" @click="returnWindow">
         <div class="header">
           <h2 class="title">Налоговый вычет</h2>
         </div>
@@ -24,21 +24,9 @@
 
         <div v-if="showCalculations === true" class="calculations">
           <p> Итого можете внести в качестве досрочных: </p>
-          <div class="repaymentPerYear">
+          <div class="repaymentPerYear" v-for="(pay,index) in fullReturn" :key="index">
             <input type="checkbox">
-            <p>78000 тыс руб <span> в 1-й год </span> </p>
-          </div>
-          <div class="repaymentPerYear">
-            <input type="checkbox">
-            <p>78000 тыс руб <span> в 2-й год </span> </p>
-          </div>
-          <div class="repaymentPerYear">
-            <input type="checkbox">
-            <p>78000 тыс руб <span> в 3-й год </span> </p>
-          </div>
-          <div class="repaymentPerYear">
-            <input type="checkbox">
-            <p>26000 тыс руб <span> в 4-й год </span> </p>
+            <p>{{pay}} тыс руб <span> {{index+1}}-й год </span> </p>
           </div>
         </div>
 
@@ -76,7 +64,13 @@ export default {
     }
   },
   methods:{
+    returnWindow(){
+      this.$router.push({name:'mainPage'});
+      document.querySelector(".main").style.background = 'linear-gradient(255.35deg, #DC3131 0.83%, rgba(255, 79, 79, 0) 108.93%), #FF5E56';
+    },
     add(){
+      this.fullReturn = [];
+      this.returnMoneyInYear = [];
       let curSalary = Number(this.salary);
       if( isNaN(curSalary) ) {
         return alert('Введите число!'); 
@@ -86,6 +80,7 @@ export default {
           return this.fullReturn.push(260000);
         }
           console.log(this.fullReturn);
+
       // налог ежемесячный
       this.taxFree = curSalary *0.13;
       // налог в год
@@ -102,14 +97,16 @@ export default {
     // функция, которая возвращает массив с годовыми взносами и последним элементов является остаточная сумма 
     amoundOfMoney(n){
       let maxReturn = 260000;
-      let res = Number((maxReturn/n).toFixed(0));
+      let res = Math.floor(maxReturn/n);
       if(this.fullReturn.length != res){
         for(let i=0;i<res;i++){
           this.fullReturn.push(n);
         }
       } else{
         let remainder = this.fullReturn.map(i=>n+=i, n=0).reverse()[0];
-        this.fullReturn.push(maxReturn  - remainder);
+        if(remainder < maxReturn){
+          this.fullReturn.push(maxReturn  - remainder);
+        }
       }
       return this.fullReturn;
     },
@@ -140,9 +137,24 @@ export default {
   font-style: normal;
 }
 
+
+
 *{
   text-decoration: none;
   margin: 0;
+}
+*::-webkit-scrollbar{
+  width: 6px;
+  height: 6px;
+}
+*:-webkit-scrollbar-track{
+  -webkit-box-shadow: 5px 5px 5px -5px rgba(34, 60, 80, 0.2) inset;
+  background-color: #f9f9fd;
+  border-radius: 10px;
+}
+*::-webkit-scrollbar-thumb{
+  border-radius: 10px;
+  background: linear-gradient(255.35deg, #DC3131 0.83%, rgba(255, 79, 79, 0) 108.93%), #FF5E56;
 }
 .firstPage_container{
   padding-top: 120px;
@@ -161,11 +173,13 @@ export default {
   font-size: 14px;
   color: black;
 }
+
 .close_img{
   position: absolute;
   right: 5%;
   top: 4%;
 }
+
 .title {
   font-size: 28px;
   line-height: 40px;
@@ -187,7 +201,7 @@ export default {
   padding-bottom: 8px;
 }
 .currentSalary > input {
-  width: 488px;
+  width: 100%;
   height: 40px;
   border: 1px solid #DFE3E6;
   box-sizing: border-box;
@@ -225,8 +239,7 @@ export default {
 }
 .btn_add { 
   margin-top: 40px;
-  margin-left: 32px;
-  width: 488px;
+  width: 100%;
   height: 56px;
   left: 32px;
   top: 388px;
@@ -239,6 +252,7 @@ export default {
   line-height: 24px;
 }
 .add {
+  margin: 0 32px;
   padding-bottom: 32px;
 }
 .calculations {
@@ -246,6 +260,8 @@ export default {
   flex-direction: column;
   flex-wrap: nowrap;
   padding: 0 32px;
+  max-height: 240px;
+  overflow-y: scroll;
 }
 .repaymentPerYear{
   display: flex;
@@ -264,4 +280,16 @@ export default {
 .repaymentPerYear > p >  span{
   opacity: 0.5;
 }
+
+@media screen and (max-width: 770px){
+  .header > h2 { font-size: 18px; }
+  .title { padding: 32px 32px 16px 32px; }
+  .title_ctx > p { font-size: 12px; }
+  .firstWindow { width: 453px; };
+  .close_img { width: 12px; }
+}
+@media screen and (max-width: 490px){
+  .firstWindow{ width: 320px; border-radius:0 }
+}
+
 </style>
