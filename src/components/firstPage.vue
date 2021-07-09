@@ -20,7 +20,7 @@
             @keydown.enter="add"
           >
           <span v-if="error == true">Поле обязательно для заполнения</span>
-          <span v-else>Рассчитать</span>
+          <span v-else @click="add">Рассчитать</span>
         </div>
 
         <div v-if="showCalculations === true" class="calculations">
@@ -186,6 +186,10 @@ export default {
   right: 5%;
   top: 4%;
 }
+.close_img:hover{
+  box-shadow: 0px 0px 24px rgba(234, 0, 41, 0.33);
+
+}
 
 .title {
   font-size: 28px;
@@ -247,7 +251,7 @@ export default {
   border-radius: 50px;
   border: none;
   margin-left: 20px;
-
+  transition: 0.4s;
 }
 .btn_add { 
   margin-top: 40px;

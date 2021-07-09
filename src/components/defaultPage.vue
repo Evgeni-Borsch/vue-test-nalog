@@ -32,6 +32,13 @@ export default {
   background: none;
   pointer-events: visible;
 }
+.main_btn:hover{
+  background: #EA0029;
+  box-shadow: 0px 0px 24px rgba(234, 0, 41, 0.33);
+  border-radius: 6px;
+  transition: 0.3s;
+  cursor: pointer;
+}
 .main_btn_text{
   color: #FFFFFF;
   font-style: normal;
