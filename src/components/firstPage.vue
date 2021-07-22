@@ -78,7 +78,7 @@ export default {
         this.error = true
         return;
       }
-        if(this.salary < 9999){
+        if(this.salary < 12793){
           return  alert('Зарплата не может быть меньше 12792руб (Мин труда РФ от 01.01.2021г');
         }
       document.querySelector(".currentSalary > input").style.border = '3px solid #DFE3E6';
